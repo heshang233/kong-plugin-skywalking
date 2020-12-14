@@ -15,27 +15,22 @@
 -- limitations under the License.
 --
 
-local _M = {}
+local typedefs = require "kong.db.schema.typedefs"
 
--- Return Services as service register parameter
-function _M.newReportInstanceProperties(serviceName, serviceInstance)
-    local allProperties = {
-        key = "language",
-        value = "lua"
-    }
-
-    return {
-        service = serviceName,
-        serviceInstance = serviceInstance,
-        properties = {allProperties}
-    }
-end
-
-function _M.newServiceInstancePingPkg(serviceName, serviceInstance)
-    return {
-        service = serviceName,
-        serviceInstance = serviceInstance,
-    }
-end
-
-return _M
+return {
+  name = "skywalking",
+  fields = {
+    { protocols = typedefs.protocols_http },
+    { config = {
+        type = "record",
+        fields = {
+          { backend_http_uri = typedefs.url({ required = true }) },
+          { service_name = { type = "string", default = "Kong Service", }, },
+		  { cluster_flag = { type = "boolean", default = false }, },
+          { service_instance_name = { type = "string", default = "Kong Service Instance", }, },
+		  { sample_ratio = { type = "number", between = { 0 , 1 }, default = 1 }, },
+        },
+      },
+    },
+  },
+}

@@ -1,23 +1,23 @@
-package = "kong-plugin-skywalking" 
+package = "kong-plugin-skywalking"
 
-version = "0.2.0-1" 
+version = "0.3.0-0"
 
-local pluginName = "skywalking"
+local pluginName = "skywalking-kong"
 
 supported_platforms = {"linux", "macosx"}
 source = {
-  url = "https://github.com/polaris-liu/kong-plugin-skywalking.git",
-  tag = "0.2.0"
+  url = "https://github.com/heshang233/kong-plugin-skywalking.git",
+  tag = "v0.3.0"
 }
 
 description = {
   summary = "The Nginx Lua agent for Apache SkyWalking kong-plugin",
-  homepage = "https://github.com/polaris-liu/kong-plugin-skywalking",
+  homepage = "https://github.com/heshang233/kong-plugin-skywalking",
   license = "Apache 2.0"
-
 }
 
 dependencies = {
+   "skywalking-nginx-lua = 0.3-0"
 }
 
 build = {
@@ -34,5 +34,6 @@ build = {
     ["kong.plugins."..pluginName..".span_layer"] = "kong/plugins/"..pluginName.."/span_layer.lua",
     ["kong.plugins."..pluginName..".tracer"] = "kong/plugins/"..pluginName.."/tracer.lua",
     ["kong.plugins."..pluginName..".tracing_context"] = "kong/plugins/"..pluginName.."/tracing_context.lua",
+    ["kong.plugins."..pluginName..".util"] = "kong/plugins/"..pluginName.."/util.lua",
   }
 }
