@@ -25,7 +25,26 @@ local SkyWalkingHandler = {
   PRIORITY = 100000,
 }
 
-function SkyWalkingHandler:init_worker(config)
+local function get_conf(self)
+    -- for some reason init_worker does *not* get the plugins `conf` as parameter, see https://github.com/Kong/kong/issues/3001
+    -- see also: https://discuss.konghq.com/t/custom-plugin-access-plugin-configuration-from-init-worker/4445
+    local key = kong.db.plugins:cache_key("skywalking", nil, nil, nil)
+    local plugin, err = kong.cache:get(key, nil, function(key)
+      local row, err = kong.db.plugins:select_by_cache_key(key)
+      if err then
+        return nil, tostring(err)
+      end
+      return row
+    end, key)
+    if err then
+      ngx.log(ngx.ERR, "err in (pre-)fetching plugin ", self._name, " config:", err)
+      return nil, err
+    end
+    return plugin.config, nil
+end
+
+function SkyWalkingHandler:init_worker()
+  local config, err = get_conf(self)
   local metadata_buffer = ngx.shared.tracing_buffer
 
   metadata_buffer:set('serviceName', config.service_name)
@@ -42,7 +61,8 @@ function SkyWalkingHandler:init_worker(config)
 end
 
 function SkyWalkingHandler:rewrite(config)
-  kong.log.info('access phase of skywalking plugin')
+
+
   kong.ctx.plugin.skywalking_sample = false
   if config.sample_ratio == 1 or math.random() < config.sample_ratio then
       kong.ctx.plugin.skywalking_sample = true
