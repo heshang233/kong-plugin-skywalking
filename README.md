@@ -25,6 +25,6 @@ vi /etc/kong/kong.conf
 
 ...
 nginx_http_lua_shared_dict=tracing_buffer 100m
-plugins = bundled,skywalking-kong
+plugins = bundled,skywalking
 ...
 ```
