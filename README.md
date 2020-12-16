@@ -24,7 +24,6 @@ cp -r ./kong/plugins/skywalking/ /usr/local/share/lua/5.1/kong/plugins
 vi /etc/kong/kong.conf
 
 ...
-nginx_http_lua_shared_dict=tracing_buffer 100m
 plugins = bundled,skywalking
 ...
 ```

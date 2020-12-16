@@ -14,23 +14,22 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 --
-
 local typedefs = require "kong.db.schema.typedefs"
 
 return {
-  name = "skywalking",
-  fields = {
-    { protocols = typedefs.protocols_http },
-    { config = {
-        type = "record",
-        fields = {
-          { backend_http_uri = typedefs.url({ required = true }) },
-          { service_name = { type = "string", default = "Kong Service", }, },
-		  { cluster_flag = { type = "boolean", default = false }, },
-          { service_instance_name = { type = "string", default = "Kong Service Instance", }, },
-		  { sample_ratio = { type = "number", between = { 0 , 1 }, default = 1 }, },
+    name = "skywalking",
+    fields = {
+        { protocols = typedefs.protocols_http },
+        { config = {
+            type = "record",
+            fields = {
+                { backend_http_uri = typedefs.url({ required = true }) },
+                { max_callback_time_spent = { type = "number", default = 5000 } },
+                { service_name = { type = "string", default = "Kong Service", }, },
+                { service_instance_name = { type = "string", default = "Kong Service Instance", }, },
+                { sample_ratio = { type = "number", between = { 0 , 1 }, default = 1 }, },
+            },
         },
-      },
+        },
     },
-  },
 }
