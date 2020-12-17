@@ -35,6 +35,7 @@ function Tracer:start(config, upstream_name, correlation)
     --local serviceInstanceName = metadata_shdict:get('serviceInstanceName')
     local serviceName = config.service_name
     local serviceInstanceName = config.service_instance_name
+    local namespace = config.namespace
     local tracingContext = TC.new(serviceName, serviceInstanceName)
 
     -- Constant pre-defined in SkyWalking main repo
@@ -67,7 +68,11 @@ function Tracer:start(config, upstream_name, correlation)
     Span.setLayer(exitSpan, Layer.HTTP)
 
     for name, value in pairs(contextCarrier) do
-        ngx.req.set_header(name, value)
+        if namespace ~= nil or namespace ~= '' then
+            ngx.req.set_header(namespace .. '-' .. name, value)
+        else
+            ngx.req.set_header(name, value)
+        end
     end
 
     -- Push the data in the context

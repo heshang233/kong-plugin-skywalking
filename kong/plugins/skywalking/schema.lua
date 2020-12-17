@@ -27,6 +27,7 @@ return {
                 { max_callback_time_spent = { type = "number", default = 5000 } },
                 { service_name = { type = "string", default = "Kong Service", }, },
                 { service_instance_name = { type = "string", default = "Kong Service Instance", }, },
+                { namespace = { type = "string"}, },
                 { sample_ratio = { type = "number", between = { 0 , 1 }, default = 1 }, },
             },
         },
