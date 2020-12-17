@@ -6,7 +6,7 @@ local pluginName = "skywalking"
 
 supported_platforms = {"linux", "macosx"}
 source = {
-  url = "git://github.com/heshang233/kong-plugin-skywalking.git",
+  url = "git://github.com/heshang233/kong-plugin-skywalking/",
   tag = "v0.3.0"
 }
 

@@ -31,35 +31,6 @@ local ngx_timer_every = ngx.timer.every
 
 local Client = {}
 
-key = ""
-local function PrintTable(table , level)
-    level = level or 1
-    local indent = ""
-    for i = 1, level do
-        indent = indent.."  "
-    end
-
-    if key ~= "" then
-        log.debug(indent..key.." ".."=".." ".."{")
-    else
-        log.debug(indent .. "{")
-    end
-
-    key = ""
-    for k,v in pairs(table) do
-        log.debug("-----")
-        if type(v) == "table" then
-            key = k
-            PrintTable(v, level + 1)
-        else
-            local content = string.format("%s%s = %s", indent .. "  ",tostring(k), tostring(v))
-            log.debug(content)
-        end
-    end
-    log.debug(indent .. "}")
-
-end
-
 local function report_service_instance(config)
     local reportInstance = require("skywalking.management").newReportInstanceProperties(config.service_name, config.service_instance_name)
     local reportInstanceParam, err = cjson.encode(reportInstance)
@@ -182,11 +153,8 @@ local function send_segments_batch(premature)
     end
     local start_time = socket.gettime()*1000
     repeat
-        for k, v in pairs(skywalking_queue_hashes) do
-            log.debug("[skywalking] send_segments_batch hash_key :", k, ", skywalking_queue_hashes : ", cjson.encode(v))
-        end
         for key, queue in pairs(skywalking_queue_hashes) do
-            log.debug("[skywalking] key : ", key)
+            log.debug("[skywalking] send_segments_batch hash_key :", k, ", skywalking_queue_hashes : ", cjson.encode(v))
             local config = config_hashes[key]
             if not config then
                 log.debug("[skywalking] Skipping sending segments to skywalking oap, since no configuration is available yet")
@@ -241,9 +209,6 @@ local function prepare_for_report(hash_key)
     log.debug("[skywalking] prepareForReport hash_key : ", hash_key)
     table.insert(skywalking_queue_hashes[hash_key], Segment.transform(segment))
     log.debug("[skywalking] prepareForReport segmentJson : ", cjson.encode(skywalking_queue_hashes[hash_key]))
-    for k, v in pairs(skywalking_queue_hashes) do
-        log.debug("[skywalking] hash_key :", k, ", prepareForReport skywalking_queue_hashes : ", cjson.encode(v))
-    end
 
 end
 

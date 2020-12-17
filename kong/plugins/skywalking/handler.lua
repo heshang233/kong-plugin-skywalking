@@ -19,8 +19,6 @@ local sw_client = require "kong.plugins.skywalking.client"
 local sw_tracer = require "kong.plugins.skywalking.tracer"
 skywalking_queue_hashes = {}
 
-local log = kong.log
-
 local SkyWalkingHandler = {
     VERSION = "0.3.0",
     -- We want to run first so that timestamps taken are at start of the phase
