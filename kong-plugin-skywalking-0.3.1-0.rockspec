@@ -1,13 +1,13 @@
 package = "kong-plugin-skywalking"
 
-version = "0.3.0-0"
+version = "0.3.1-0"
 
 local pluginName = "skywalking"
 
 supported_platforms = {"linux", "macosx"}
 source = {
   url = "git://github.com/heshang233/kong-plugin-skywalking/",
-  tag = "v0.3.0"
+  tag = "v0.3.1"
 }
 
 description = {
